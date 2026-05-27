@@ -6,7 +6,7 @@ The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep
 
 ```bash
 claude plugin marketplace add ModelBound/modelbound-claude-code-plugin
-claude plugin install modelbound
+claude plugin install mb
 ```
 
 Then sign in:

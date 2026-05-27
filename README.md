@@ -2,6 +2,14 @@
 
 The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep your team's skills, rules, and system prompts in sync; audit token cost; and harden MCP/bash tool use.
 
+## Why ModelBound?
+
+Your skills, rules, and system prompts live in one place — ModelBound — and follow you wherever you work. Write a skill in Cursor, refine it in Claude Code, use it in VS Code with Copilot. No re-writing, no copy-paste between tools. When you switch editors or try a new AI assistant, your context is already there.
+
+This means you get more out of every AI subscription you pay for. Instead of rebuilding your setup from scratch each time you move between tools, ModelBound keeps your library portable. One investment in good context pays off across every platform you touch.
+
+For teams, it's the same story at scale: curate once, distribute everywhere. Everyone stays on the same page regardless of which editor or AI tool they prefer.
+
 ## Install
 
 ```bash

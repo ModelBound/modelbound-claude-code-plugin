@@ -1,0 +1,86 @@
+# ModelBound for Claude Code
+
+The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep your team's skills, rules, and system prompts in sync; audit token cost; and harden MCP/bash tool use.
+
+## Install
+
+```bash
+claude plugin marketplace add ModelBound/modelbound-claude-code-plugin
+claude plugin install modelbound
+```
+
+Then sign in:
+
+```
+/mb:sign-in
+```
+
+## Commands
+
+### Sync & governance
+| Command | What it does |
+|---|---|
+| `/mb:sign-in` | Browser device-code auth against modelbound.co |
+| `/mb:status` | Show signed-in user, active team, last sync |
+| `/mb:sync-rules` | Pull team's rules/skills/system prompts into `./.claude/` |
+| `/mb:push-skill <path>` | Push a local `SKILL.md` to your team library |
+
+### Token economy
+| Command | What it does |
+|---|---|
+| `/mb:tokens` | Count tokens in every file under `./.claude/`, flag over-budget vs team thresholds |
+| `/mb:cost-estimate` | Per-session cost estimate across Sonnet / Opus / Haiku for current context size |
+| `/mb:optimize <file>` | AI-compact a file via ModelBound; writes `<file>.optimized.md` for diff review |
+| `/mb:tool-audit` | Rank installed MCP tools by token cost; recommend disables |
+
+### Security
+| Command | What it does |
+|---|---|
+| `/mb:audit` | Scan `.claude/` + `.mcp.json` for leaked secrets, prompt-injection patterns, untrusted MCP URLs |
+| `/mb:trust` | Score every local skill 0–100 via `@modelbound/skill-trust` heuristics |
+| `/mb:mcp-verify` | HTTPS-only, allow-list, and SSRF-guard checks on configured MCP servers |
+
+## Hooks (opt-in, ON by default)
+
+- **`SessionStart`** — runs `/mb:sync-rules` if you opted in; warns on drift
+- **`PostToolUse(Edit)`** on `.claude/**` — auto-pushes edits to ModelBound
+- **`PreToolUse(Bash)`** — blocks a configurable denylist (`rm -rf`, `curl | sh`)
+- **`PreToolUse(WebFetch)`** — blocks private IP ranges and non-allow-listed domains
+
+Disable any hook in `~/.modelbound/config.json`:
+
+```json
+{ "hooks": { "autoSync": false, "bashGuard": true, "webFetchGuard": true } }
+```
+
+## Subagents
+
+- **`mb-reviewer`** — reviews diffs using your team's ReviewPanel rubric
+- **`mb-context-doctor`** — diagnoses CLAUDE.md bloat, suggests Smart Split
+
+## Config
+
+Config lives at `~/.modelbound/config.json` (created on sign-in):
+
+```json
+{
+  "apiKey": "mb_live_...",
+  "activeTeamId": "uuid",
+  "mcpUrl": "https://mcp.modelbound.co/mcp",
+  "authUrl": "https://modelbound.co/api/extension-device-auth"
+}
+```
+
+## Updating
+
+```bash
+claude plugin update modelbound
+```
+
+## Links
+
+- [Guide](https://modelbound.co/guides/claude-code-plugin)
+- [ModelBound.co](https://modelbound.co)
+- [Cursor / VS Code extension](https://github.com/ModelBound/modelbound-cursor-extension)
+
+MIT licensed.

@@ -1,16 +1,10 @@
 {
-  "name": "modelbound",
-  "version": "0.1.0",
+  "name": "mb",
+  "version": "0.1.1",
   "description": "ModelBound for Claude Code — sync skills/rules from ModelBound.co, audit token cost, and harden tool & MCP usage.",
-  "author": {
-    "name": "ModelBound",
-    "url": "https://modelbound.co"
-  },
+  "author": { "name": "ModelBound", "url": "https://modelbound.co" },
   "homepage": "https://modelbound.co/guides/claude-code-plugin",
   "repository": "https://github.com/ModelBound/modelbound-claude-code-plugin",
   "license": "MIT",
-  "keywords": ["modelbound", "skills", "rules", "context", "tokens", "audit", "mcp", "governance"],
-  "commands": "./commands",
-  "agents": "./agents",
-  "hooks": "./hooks/hooks.json"
+  "keywords": ["modelbound", "skills", "rules", "context", "tokens", "audit", "mcp", "governance"]
 }

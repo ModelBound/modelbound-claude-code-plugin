@@ -1,15 +1,12 @@
 {
   "name": "modelbound",
-  "owner": {
-    "name": "ModelBound",
-    "url": "https://modelbound.co"
-  },
+  "owner": { "name": "ModelBound", "url": "https://modelbound.co" },
   "plugins": [
     {
-      "name": "modelbound",
+      "name": "mb",
       "source": "./",
       "description": "Sync ModelBound skills/rules into Claude Code, audit token cost, score skill trust, and guard MCP/bash tool use.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "category": "productivity",
       "tags": ["context", "skills", "rules", "tokens", "security", "mcp"]
     }

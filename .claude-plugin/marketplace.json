@@ -1,5 +1,6 @@
 {
   "name": "modelbound",
+  "description": "Sync team skills and rules from ModelBound.co into Claude Code, audit token cost, and harden MCP/bash tool use.",
   "owner": { "name": "ModelBound", "url": "https://modelbound.co" },
   "plugins": [
     {

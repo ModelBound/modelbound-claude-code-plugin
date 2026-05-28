@@ -32,6 +32,8 @@ Then sign in:
 | `/mb:status` | Show signed-in user, active team, last sync |
 | `/mb:sync-rules` | Pull team's rules/skills/system prompts into `./.claude/` |
 | `/mb:push-skill <path>` | Push a local `SKILL.md` to your team library |
+| `/mb:tree` | Print the team's AI resource hierarchy (platform → folder → files) |
+| `/mb:skills [platform] [ai_type]` | List team skills, optionally filtered by `source_platform` and `ai_type` |
 
 ### Token economy
 | Command | What it does |

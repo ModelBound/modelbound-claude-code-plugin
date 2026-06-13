@@ -1,6 +1,6 @@
 # ModelBound for Claude Code
 
-The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep your team's skills, rules, and system prompts in sync; audit token cost; and harden MCP/bash tool use.
+The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep your team's skills, rules, and system prompts in sync; audit token cost; harden MCP/bash tool use; and run the Skill Development Pipeline without leaving the terminal.
 
 ## Why ModelBound?
 
@@ -43,6 +43,17 @@ Then sign in:
 | `/mb:optimize <file>` | AI-compact a file via ModelBound; writes `<file>.optimized.md` for diff review |
 | `/mb:tool-audit` | Rank installed MCP tools by token cost; recommend disables |
 
+### Skill Development Pipeline (Test & Optimize)
+| Command | What it does |
+|---|---|
+| `/mb:pipeline <skill-id>` | Run test → benchmark → optimize pipeline on a skill |
+| `/mb:pipeline <skill-id> --dry-run` | Preview pipeline stages and estimated token cost |
+| `/mb:test [skill-id]` | Run skill tests; omit `skill-id` to list recent test runs |
+| `/mb:versions <skill-id>` | List saved checkpoints with scores and labels |
+| `/mb:restore <skill-id> <version-id>` | Restore a skill to a specific checkpoint |
+| `/mb:diff <skill-id> [from] [to]` | Diff between two versions (defaults: latest vs current) |
+| `/mb:health` | Local `.claude/` token count + remote health scores and budgets |
+
 ### Security
 | Command | What it does |
 |---|---|
@@ -54,6 +65,7 @@ Then sign in:
 
 - **`SessionStart`** — runs `/mb:sync-rules` if you opted in; warns on drift
 - **`PostToolUse(Edit)`** on `.claude/**` — auto-pushes edits to ModelBound
+- **`PreToolUse(Edit|Write|MultiEdit)`** — snapshots files to `.mb-backup/` before editing (best-effort)
 - **`PreToolUse(Bash)`** — blocks a configurable denylist (`rm -rf`, `curl | sh`)
 - **`PreToolUse(WebFetch)`** — blocks private IP ranges and non-allow-listed domains
 

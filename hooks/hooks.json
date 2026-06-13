@@ -1,29 +1,15 @@
 {
-  "SessionStart": [
-    {
-      "matcher": "*",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/session-start.js",
-      "description": "ModelBound: warn on rule drift, optionally auto-sync"
-    }
-  ],
-  "PostToolUse": [
-    {
-      "matcher": "Edit|Write|MultiEdit",
-      "pathPattern": ".claude/**",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/post-edit-sync.js",
-      "description": "ModelBound: auto-push edits under .claude/ back to team library"
-    }
-  ],
-  "PreToolUse": [
-    {
-      "matcher": "Bash",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/guard-bash.js",
-      "description": "ModelBound: block denylisted bash patterns (rm -rf, curl | sh, etc.)"
-    },
-    {
-      "matcher": "WebFetch",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/guard-webfetch.js",
-      "description": "ModelBound: block private IPs and non-allow-listed domains"
-    }
-  ]
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/pre-edit-backup.mjs"
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -1,4 +1,4 @@
-# ModelBound for Claude Code
+# ModelBound — Claude Code plugin
 
 The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep your team's skills, rules, and system prompts in sync; audit token cost; harden MCP/bash tool use; and run the Skill Development Pipeline without leaving the terminal.
 
@@ -13,35 +13,14 @@ For teams, it's the same story at scale: curate once, distribute everywhere. Eve
 ## Install
 
 ```bash
-claude plugin marketplace add ModelBound/modelbound-claude-code-plugin
-claude plugin install mb
+# In Claude Code
+/plugin install ModelBound/modelbound-claude-code-plugin
+mb-login    # one-time device-code auth
 ```
 
-Then sign in:
+Requires Node ≥ 20 and either `MODELBOUND_API_KEY` or a one-time `/mb login`.
 
-```
-/mb:sign-in
-```
-
-## Commands
-
-### Sync & governance
-| Command | What it does |
-|---|---|
-| `/mb:sign-in` | Browser device-code auth against modelbound.co |
-| `/mb:status` | Show signed-in user, active team, last sync |
-| `/mb:sync-rules` | Pull team's rules/skills/system prompts into `./.claude/` |
-| `/mb:push-skill <path>` | Push a local `SKILL.md` to your team library |
-| `/mb:tree` | Print the team's AI resource hierarchy (platform → folder → files) |
-| `/mb:skills [platform] [ai_type]` | List team skills, optionally filtered by `source_platform` and `ai_type` |
-
-### Token economy
-| Command | What it does |
-|---|---|
-| `/mb:tokens` | Count tokens in every file under `./.claude/`, flag over-budget vs team thresholds |
-| `/mb:cost-estimate` | Per-session cost estimate across Sonnet / Opus / Haiku for current context size |
-| `/mb:optimize <file>` | AI-compact a file via ModelBound; writes `<file>.optimized.md` for diff review |
-| `/mb:tool-audit` | Rank installed MCP tools by token cost; recommend disables |
+## Slash commands
 
 ### Skill Development Pipeline (Test & Optimize)
 | Command | What it does |
@@ -57,11 +36,17 @@ Then sign in:
 ### Security
 | Command | What it does |
 |---|---|
-| `/mb:audit` | Scan `.claude/` + `.mcp.json` for leaked secrets, prompt-injection patterns, untrusted MCP URLs |
-| `/mb:trust` | Score every local skill 0–100 via `@modelbound/skill-trust` heuristics |
-| `/mb:mcp-verify` | HTTPS-only, allow-list, and SSRF-guard checks on configured MCP servers |
+| `/mb-optimize <file\|skill>` | Run token optimization. Add `--apply` to save a new version. |
+| `/mb-pipeline <skill>` | Full Skill Development Pipeline (lint → trust → test → benchmark → optimize). |
+| `/mb-test <skill>` | Run the test suite (optional `--model`). |
+| `/mb-benchmark <skill> <verA> <verB>` | Head-to-head benchmark. |
+| `/mb-versions <skill>` | List versions, newest first. |
+| `/mb-restore <skill> <versionId>` | Restore (non-destructive — creates a new version). |
+| `/mb-diff <skill> <from> [to]` | Unified diff between versions. |
+| `/mb-health` | Check API connectivity + auth. |
+| `/mb-login` / `/mb-logout` / `/mb-whoami` | Auth shortcuts. |
 
-## Hooks (opt-in, ON by default)
+## Pre-edit backup hook
 
 - **`SessionStart`** — runs `/mb:sync-rules` if you opted in; warns on drift
 - **`PostToolUse(Edit)`** on `.claude/**` — auto-pushes edits to ModelBound
@@ -99,10 +84,8 @@ Config lives at `~/.modelbound/config.json` (created on sign-in):
 claude plugin update modelbound
 ```
 
-## Links
+Disable per-session with `MODELBOUND_DISABLE_BACKUP=1`.
 
-- [Guide](https://modelbound.co/guides/claude-code-plugin)
-- [ModelBound.co](https://modelbound.co)
-- [Cursor / VS Code extension](https://github.com/ModelBound/modelbound-cursor-extension)
+## License
 
-MIT licensed.
+MIT

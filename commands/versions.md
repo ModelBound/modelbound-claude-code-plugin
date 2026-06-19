@@ -1,9 +1,7 @@
 ---
-description: List skill versions and checkpoints
+description: List skill versions (file path, slug, or UUID)
 tags: [mb]
-argument-hint: <skill-id>
+argument-hint: <skill-file|slug>
 ---
-
-List saved versions of a skill with timestamps and scores.
 
 !`node ${CLAUDE_PLUGIN_ROOT}/scripts/versions.js ${ARGUMENTS}`

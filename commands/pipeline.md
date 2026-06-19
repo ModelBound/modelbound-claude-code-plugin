@@ -1,9 +1,9 @@
 ---
-description: Run a skill through the ModelBound Test & Optimize pipeline
+description: Run the ModelBound Test & Optimize pipeline on a skill file
 tags: [mb]
-argument-hint: <skill-id>
+argument-hint: <skill-file> [--stage test_optimize|production|full]
 ---
 
-Run the full ModelBound Skill Development Pipeline on a skill. Executes tests, benchmarks, and generates an optimized version.
+Run the Skill Development Pipeline. Accepts a file path or slug — UUIDs are resolved internally via sync.
 
 !`node ${CLAUDE_PLUGIN_ROOT}/scripts/pipeline.js ${ARGUMENTS}`

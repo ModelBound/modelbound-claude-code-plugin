@@ -146,8 +146,46 @@ export async function ensureValidApiKey(): Promise<{ cfg: ModelBoundConfig; apiK
   }
   return { cfg, apiKey: cfg.apiKey, check };
 }
-/** Call a tool on the ModelBound MCP server (Streamable HTTP). */
-export async function callMcpTool<T = unknown>(
+/** Surface hosted MCP errors that arrive without HTTP failure. */
+export function extractMcpError(text: string, structured?: unknown): string | undefined {
+  const parts: string[] = [];
+  if (typeof text === "string") {
+    if (text.includes("[MCP_ERROR]")) parts.push(text.replace(/^\[MCP_ERROR\]\s*/, ""));
+    if (text.includes("Pipeline failed:")) parts.push(text.trim());
+    if (text.includes("Lookup failed:")) parts.push(text.trim());
+  }
+  if (structured && typeof structured === "object" && structured !== null && "error" in structured) {
+    const err = (structured as { error?: unknown }).error;
+    if (typeof err === "string") parts.push(err);
+    else if (err) parts.push(JSON.stringify(err));
+  }
+  return parts.length ? parts.join("\n") : undefined;
+}
+
+function parseToolResult<T>(name: string, result: unknown): T | null {
+  if (!result || typeof result !== "object") return result as T | null;
+  const r = result as {
+    content?: Array<{ type?: string; text?: string }>;
+    structuredContent?: unknown;
+    isError?: boolean;
+  };
+  const text = r.content?.map((c) => c.text ?? "").join("\n").trim();
+  const structured = r.structuredContent;
+  const err = text ? extractMcpError(text, structured) : extractMcpError("", structured);
+  if (r.isError || err) throw new Error(err ?? text ?? `MCP ${name} failed`);
+
+  if (structured !== undefined) return structured as T;
+  if (text) {
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      return { text } as T;
+    }
+  }
+  return result as T;
+}
+
+async function callMcpOnce<T>(
   cfg: ModelBoundConfig,
   apiKey: string,
   name: string,
@@ -168,10 +206,6 @@ export async function callMcpTool<T = unknown>(
     }),
   });
 
-  if (!res.ok) {
-    throw new Error(`MCP ${name} failed: HTTP ${res.status}`);
-  }
-
   const ctype = res.headers.get("content-type") ?? "";
   let body = "";
   if (ctype.includes("text/event-stream")) {
@@ -185,6 +219,20 @@ export async function callMcpTool<T = unknown>(
   } else {
     body = await res.text();
   }
+
+  if (!res.ok) {
+    let msg = `MCP ${name} failed: HTTP ${res.status}`;
+    if (body) {
+      try {
+        const parsed = JSON.parse(body);
+        msg = parsed?.error?.message ?? msg;
+      } catch {
+        msg = body.slice(0, 500);
+      }
+    }
+    throw new Error(msg);
+  }
+
   if (!body) return null;
 
   let parsed: any;
@@ -196,12 +244,27 @@ export async function callMcpTool<T = unknown>(
   if (parsed?.error) {
     throw new Error(`MCP ${name}: ${parsed.error.message ?? JSON.stringify(parsed.error)}`);
   }
-  const result = parsed?.result ?? null;
-  if (!result) return null;
-  if (result.structuredContent) return result.structuredContent as T;
-  const txt = result.content?.[0]?.text;
-  if (typeof txt === "string") {
-    try { return JSON.parse(txt) as T; } catch { return { text: txt } as T; }
+  return parseToolResult<T>(name, parsed?.result ?? null);
+}
+
+/** Call a tool on the ModelBound MCP server (Streamable HTTP). Tries aliases on Unknown tool. */
+export async function callMcpTool<T = unknown>(
+  cfg: ModelBoundConfig,
+  apiKey: string,
+  name: string,
+  args: Record<string, unknown>,
+  aliases: string[] = [],
+): Promise<T | null> {
+  const names = [name, ...aliases];
+  let lastErr: unknown;
+  for (const toolName of names) {
+    try {
+      return await callMcpOnce<T>(cfg, apiKey, toolName, args);
+    } catch (e) {
+      lastErr = e;
+      const msg = e instanceof Error ? e.message : String(e);
+      if (!msg.includes("Unknown tool")) throw e;
+    }
   }
-  return result as T;
+  throw lastErr instanceof Error ? lastErr : new Error(`Unknown MCP tool: ${name}`);
 }

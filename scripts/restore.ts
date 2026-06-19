@@ -1,43 +1,25 @@
-// Restore a skill to a previous checkpoint version.
+// Restore a skill to a previous version (non-destructive — creates new version).
 import { callMcpTool, requireApiKey } from "./config.js";
-import { promises as fs } from "node:fs";
-import { basename } from "node:path";
+import { resolveSkillId } from "./skill.js";
 
 async function main() {
-  const skillId = process.argv[2];
-  const versionId = process.argv[3];
-  if (!skillId || !versionId) {
-    console.error("Usage: /mb:restore <skill-id> <version-id> [--write <path>]");
+  const target = process.argv[2];
+  const version = process.argv[3];
+  if (!target || !version) {
+    console.error("Usage: /mb:restore <skill-file|slug> <version>");
     process.exit(1);
   }
-  const writePath = process.argv.includes("--write") ? process.argv[process.argv.indexOf("--write") + 1] : undefined;
   const { cfg, apiKey } = await requireApiKey();
+  const skillId = await resolveSkillId(cfg, apiKey, process.cwd(), target);
 
-  const result = await callMcpTool<{
-    content: string;
-    versionId: string;
-    createdAt: string;
-  }>(cfg, apiKey, "skill.diff", {
-    skillId,
-    versionA: versionId,
-    action: "restore",
-    source: "claude-code-plugin",
-  });
+  const result = await callMcpTool<{ new_version?: string }>(
+    cfg,
+    apiKey,
+    "get_file_variants",
+    { skill_id: skillId, action: "restore", version },
+  );
 
-  if (!result?.content) {
-    console.error("Restore returned no content.");
-    process.exit(1);
-  }
-
-  if (writePath) {
-    await fs.writeFile(writePath, result.content, "utf8");
-    console.log(`Restored ${skillId}@${versionId} → ${writePath}`);
-  } else {
-    const name = basename(skillId);
-    const out = `${name}.restored.md`;
-    await fs.writeFile(out, result.content, "utf8");
-    console.log(`Restored ${skillId}@${versionId} → ${out}`);
-  }
+  console.log(`Restored v${version} of ${target}${result?.new_version ? ` → new version ${result.new_version}` : ""}`);
 }
 
 main().catch((err) => { console.error(err.message ?? err); process.exit(1); });

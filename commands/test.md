@@ -1,9 +1,7 @@
 ---
-description: Run skill tests or view test results
+description: Run skill tests (resolves file path to repo-linked UUID)
 tags: [mb]
-argument-hint: [skill-id]
+argument-hint: <skill-file|slug>
 ---
-
-Run tests for a skill or view recent test results.
 
 !`node ${CLAUDE_PLUGIN_ROOT}/scripts/test.js ${ARGUMENTS}`

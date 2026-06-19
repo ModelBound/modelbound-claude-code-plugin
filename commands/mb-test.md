@@ -1,9 +1,9 @@
 ---
-description: Run the test suite for a skill.
-argument-hint: <skill> [--version <id>] [--model <name>]
+description: Run skill tests
+argument-hint: <skill-file>
 allowed-tools: Bash(npx:*)
 ---
 
-Run: `npx -y @modelbound/cli skill test $ARGUMENTS`
+Run: `npx -y modelbound test --skill $ARGUMENTS`
 
-Report pass rate, token usage, and cost. If any assertions failed, show which ones and propose a fix.
+Report results. If assertions failed, show which ones and propose fixes.

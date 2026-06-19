@@ -1,37 +1,34 @@
 // Show diff between two skill versions.
 import { callMcpTool, requireApiKey } from "./config.js";
+import { resolveSkillId } from "./skill.js";
 
 async function main() {
-  const skillId = process.argv[2];
+  const target = process.argv[2];
   const fromVersion = process.argv[3];
   const toVersion = process.argv[4];
-  if (!skillId) {
-    console.error("Usage: /mb:diff <skill-id> [from-version] [to-version]");
+  if (!target || !fromVersion) {
+    console.error("Usage: /mb:diff <skill-file|slug> <from-version> [to-version]");
     process.exit(1);
   }
   const { cfg, apiKey } = await requireApiKey();
+  const skillId = await resolveSkillId(cfg, apiKey, process.cwd(), target);
 
-  const result = await callMcpTool<{
-    diff: string;
-    fromVersion: string;
-    toVersion: string;
-    additions: number;
-    deletions: number;
-  }>(cfg, apiKey, "skill.diff", {
-    skillId,
-    versionA: fromVersion ?? "latest",
-    versionB: toVersion ?? "current",
-    source: "claude-code-plugin",
-  });
+  const args: Record<string, string> = {
+    skill_id: skillId,
+    from_version: fromVersion,
+    mode: "diff",
+  };
+  if (toVersion) args.to_version = toVersion;
 
-  if (!result?.diff) {
-    console.log("No diff available.");
-    return;
-  }
+  const result = await callMcpTool<Record<string, unknown>>(
+    cfg,
+    apiKey,
+    "get_file_variants",
+    args,
+    ["skill.diff"],
+  );
 
-  console.log(`Diff: ${result.fromVersion} → ${result.toVersion} (+${result.additions}/-${result.deletions})`);
-  console.log("---");
-  console.log(result.diff);
+  console.log(JSON.stringify(result, null, 2));
 }
 
 main().catch((err) => { console.error(err.message ?? err); process.exit(1); });

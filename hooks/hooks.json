@@ -3,15 +3,15 @@
     {
       "matcher": "*",
       "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/session-start.js",
-      "description": "ModelBound: warn on rule drift, optionally auto-sync"
+      "description": "ModelBound: set workspace context, optionally auto-sync"
     }
   ],
   "PostToolUse": [
     {
       "matcher": "Edit|Write|MultiEdit",
-      "pathPattern": ".claude/**",
+      "pathPattern": ".modelbound/**|.claude/**|.cursor/rules/**|.kiro/skills/**|.agents/skills/**",
       "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/post-edit-sync.js",
-      "description": "ModelBound: auto-push edits under .claude/ back to team library"
+      "description": "ModelBound: auto-push skill file edits to cloud"
     }
   ],
   "PreToolUse": [

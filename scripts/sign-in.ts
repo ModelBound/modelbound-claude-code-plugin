@@ -38,7 +38,7 @@ async function main(): Promise<void> {
     if (pollRes.status === 410) throw new Error("Sign-in code expired — run /mb:sign-in again.");
     if (!pollRes.ok) throw new Error(`poll failed: HTTP ${pollRes.status}`);
     const { api_key, email, team_id } = await pollRes.json();
-    await saveConfig({ ...cfg, apiKey: api_key, email, activeTeamId: team_id });
+    await saveConfig({ ...cfg, apiKey: api_key, token: api_key, email, activeTeamId: team_id });
     console.log(`Signed in${email ? ` as ${email}` : ""}.`);
     return;
   }

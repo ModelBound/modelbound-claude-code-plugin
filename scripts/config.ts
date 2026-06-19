@@ -5,6 +5,8 @@ import { join } from "node:path";
 
 export interface ModelBoundConfig {
   apiKey?: string;
+  /** CLI/extension flat config uses `token` — normalized to apiKey on load. */
+  token?: string;
   activeTeamId?: string;
   email?: string;
   mcpUrl: string;
@@ -17,6 +19,10 @@ export interface ModelBoundConfig {
     webFetchAllowlist: string[];
   };
   lastSyncAt?: string;
+}
+
+function resolveApiKey(cfg: Partial<ModelBoundConfig>): string | undefined {
+  return cfg.apiKey ?? cfg.token ?? process.env.MODELBOUND_API_KEY;
 }
 
 const DEFAULTS: ModelBoundConfig = {
@@ -44,9 +50,11 @@ export async function loadConfig(): Promise<ModelBoundConfig> {
   try {
     const raw = await fs.readFile(CONFIG_PATH, "utf8");
     const parsed = JSON.parse(raw) as Partial<ModelBoundConfig>;
+    const apiKey = resolveApiKey(parsed);
     return {
       ...DEFAULTS,
       ...parsed,
+      ...(apiKey ? { apiKey } : {}),
       hooks: { ...DEFAULTS.hooks, ...(parsed.hooks ?? {}) },
     };
   } catch {
@@ -60,11 +68,12 @@ export async function saveConfig(cfg: ModelBoundConfig): Promise<void> {
 }
 export async function requireApiKey(): Promise<{ cfg: ModelBoundConfig; apiKey: string }> {
   const cfg = await loadConfig();
-  if (!cfg.apiKey) {
+  const apiKey = resolveApiKey(cfg);
+  if (!apiKey) {
     process.stderr.write("Not signed in. Run /mb:sign-in first.\n");
     process.exit(1);
   }
-  return { cfg, apiKey: cfg.apiKey };
+  return { cfg: { ...cfg, apiKey }, apiKey };
 }
 
 /**
@@ -138,13 +147,14 @@ export async function checkApiKey(cfg: ModelBoundConfig, apiKey: string): Promis
  */
 export async function ensureValidApiKey(): Promise<{ cfg: ModelBoundConfig; apiKey: string | undefined; check: AuthCheck | null }> {
   const cfg = await loadConfig();
-  if (!cfg.apiKey) return { cfg, apiKey: undefined, check: null };
-  const check = await checkApiKey(cfg, cfg.apiKey);
+  const apiKey = resolveApiKey(cfg);
+  if (!apiKey) return { cfg, apiKey: undefined, check: null };
+  const check = await checkApiKey(cfg, apiKey);
   if (check.status === "unauthorized") {
-    await saveConfig({ ...cfg, apiKey: undefined, email: undefined, activeTeamId: undefined });
-    return { cfg: { ...cfg, apiKey: undefined }, apiKey: undefined, check };
+    await saveConfig({ ...cfg, apiKey: undefined, token: undefined, email: undefined, activeTeamId: undefined });
+    return { cfg: { ...cfg, apiKey: undefined, token: undefined }, apiKey: undefined, check };
   }
-  return { cfg, apiKey: cfg.apiKey, check };
+  return { cfg: { ...cfg, apiKey }, apiKey, check };
 }
 /** Surface hosted MCP errors that arrive without HTTP failure. */
 export function extractMcpError(text: string, structured?: unknown): string | undefined {

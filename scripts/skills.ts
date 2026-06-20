@@ -1,5 +1,6 @@
 // Lists team skills, optionally filtered by source_platform and ai_type.
 import { callMcpTool, requireApiKey } from "./config.js";
+import { setWorkspaceContext } from "./skill.js";
 
 interface SkillRow {
   id?: string;
@@ -17,6 +18,7 @@ function pad(s: string, n: number) { return (s + " ".repeat(n)).slice(0, n); }
 async function main() {
   const [platform, aiType] = process.argv.slice(2);
   const { cfg, apiKey } = await requireApiKey();
+  await setWorkspaceContext(cfg, apiKey, process.cwd());
   const args: Record<string, string> = {};
   if (platform) args.source_platform = platform;
   if (aiType) args.ai_type = aiType;

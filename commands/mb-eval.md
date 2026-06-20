@@ -1,7 +1,7 @@
 # /mb-eval
 Eval test suite. Usage: `/mb-eval list|create|run|results` with flags.
 
-Runs `$CLAUDE_PLUGIN_ROOT/scripts/eval.js` (compiled from `scripts/eval.ts`).
+Runs `$CLAUDE_PLUGIN_ROOT/dist/eval.js` (compiled from `scripts/eval.ts`).
 
 Examples:
 - `/mb-eval list`
@@ -11,5 +11,5 @@ Examples:
 
 Or via CLI:
 ```bash
-npx -y @modelbound/cli eval list
+npx -y modelbound eval list
 ```

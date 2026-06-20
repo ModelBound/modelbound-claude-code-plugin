@@ -1,45 +1,38 @@
 # Known hosted-backend blockers
 
-These issues affect the CLI, MCP proxy, Claude Code plugin, and Cursor extension equally. They require fixes on the Lovable-hosted backend (`https://mcp.modelbound.co`). All clients surface these errors explicitly rather than swallowing them.
+Last verified: 2026-06-20 against production MCP with `mb_live_*` key.
 
-| Issue | Symptom | Root cause | Status |
-|-------|---------|------------|--------|
-| Pipeline JWT error | `Pipeline failed: Expected 3 parts in JWT; got 1` | `run-skill-pipeline` invoked with `actor_user_id` instead of `_actor: { user_id, team_id, source: "mcp" }` | Pending Lovable deploy |
-| Pipeline status query | `column skill_pipeline_runs.version does not exist` | Status query selects `version` instead of `version_before`, `version_after` | Pending Lovable deploy |
-| Ignore finding | `null value in column "team_id" of relation "skill_trust"` | `ignore_skill_finding` upsert missing `team_id` | Pending Lovable deploy |
-| Benchmark / compare / suggest | `Unauthorized` | Internal edge calls missing `_actor` forwarding | Pending Lovable deploy |
+## Resolved (verified working)
 
-## Workarounds
+| Issue | Status |
+|-------|--------|
+| Pipeline JWT / `_actor` forwarding | Fixed — `pipeline run --stage test_optimize` passes |
+| Pipeline status `version` column | Fixed — `get_skill_pipeline_status` returns `version_before` / `version_after` |
+| Benchmark / compare / suggest `Unauthorized` | Fixed — all three return results |
+| `list_skill_findings` | Working — returns scores + findings array |
 
-Until backend fixes land:
+## Client-side fixes (this repo)
 
-- **Pipeline**: errors include `Pipeline failed:` prefix — retry after Lovable deploys `_actor` fix.
-- **Findings ignore/unignore**: may fail with team_id constraint — use `/mb:findings list` to verify; retry after deploy.
-- **Benchmark, compare, suggest**: expect `Unauthorized` until internal invoke pattern is fixed.
+These were broken in the Claude Code plugin but did not require Lovable changes:
 
-## Test & Optimize workflow (once backend fixes land)
+| Symptom | Fix |
+|---------|-----|
+| `Unknown tool: 'skills.syncToIde'` on `/mb:sync-rules` | Rewrote to `list_skills` + `get_skill` + workspace context |
+| `Unknown tool: 'pipeline.status'` on `/mb:health` | Rewrote to `auth_whoami` + local token stats |
+| `Optimizer returned no content` on `/mb:optimize` | Switched from `skills.optimize` to `optimize_content` |
+| `test_case_id required` on `/mb:test` | Added `list_skill_test_cases` fallback |
+| Plugin "Not signed in" with CLI token | Read `token` field from `~/.modelbound/config.json` |
 
-```bash
-# 1. Set repo context + sync file to get repo-linked UUID
-/mb:context-set --repo org/repo
-/mb:sync-file .modelbound/prompt-pr-contributor.md
+## Still untested / monitor
 
-# 2. List findings
-/mb:findings list --skill .modelbound/prompt-pr-contributor.md
+All previously documented blockers verified working as of 2026-06-20, including `ignore_skill_finding` (tested with synthetic key).
 
-# 3. Ignore a finding by key
-node scripts/findings.js ignore --skill .modelbound/prompt-pr-contributor.md --key "escalation:critical:..."
+## Deprecated MCP aliases (optional Lovable cleanup)
 
-# 4. Re-run pipeline test stage (score reflects ignores)
-/mb:pipeline .modelbound/prompt-pr-contributor.md --stage test_optimize
-```
+Hosted MCP no longer exposes some legacy dot-names used by older clients:
 
-Or via CLI:
+- `skills.syncToIde` → use `sync_skill_from_ide`
+- `pipeline.status` → use `get_skill_pipeline_status`
+- `skills.optimize` → alias to `optimize_content` exists in server code but clients should call `optimize_content` directly
 
-```bash
-modelbound context set --repo org/repo
-modelbound sync --file .modelbound/prompt-pr-contributor.md
-modelbound findings list --skill .modelbound/prompt-pr-contributor.md
-modelbound findings ignore --skill ... --key "..."
-modelbound pipeline run --skill ... --stage test_optimize
-```
+Consider keeping aliases registered for backwards compatibility or documenting canonical snake_case names only.

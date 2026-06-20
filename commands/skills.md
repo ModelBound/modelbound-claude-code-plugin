@@ -10,4 +10,4 @@ Examples:
 - `/mb:skills claude-code` — only Claude Code resources
 - `/mb:skills cursor rule` — only Cursor rules
 
-!`node ${CLAUDE_PLUGIN_ROOT}/scripts/skills.js ${ARGUMENTS}`
+!`node ${CLAUDE_PLUGIN_ROOT}/dist/skills.js ${ARGUMENTS}`

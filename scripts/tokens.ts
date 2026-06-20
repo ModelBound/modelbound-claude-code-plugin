@@ -2,7 +2,7 @@
 import { promises as fs } from "node:fs";
 import { join, relative } from "node:path";
 import { encode } from "gpt-tokenizer";
-import { callMcpTool, loadConfig, requireApiKey } from "./config.js";
+import { callMcpTool, loadConfig, resolveApiKey } from "./config.js";
 
 interface Thresholds { system: number; skills: number; rules: number; total: number; }
 const DEFAULTS: Thresholds = { system: 5000, skills: 100000, rules: 2000, total: 128000 };
@@ -26,10 +26,11 @@ function classify(path: string): "system" | "skills" | "rules" {
 
 async function main() {
   const cfg = await loadConfig();
+  const apiKey = resolveApiKey(cfg);
   let thresholds: Thresholds = DEFAULTS;
-  if (cfg.apiKey) {
+  if (apiKey) {
     try {
-      const prefs = await callMcpTool<{ token_thresholds?: Thresholds }>(cfg, cfg.apiKey, "team.getPreferences", {});
+      const prefs = await callMcpTool<{ token_thresholds?: Thresholds }>(cfg, apiKey, "team.getPreferences", {});
       if (prefs?.token_thresholds) thresholds = { ...DEFAULTS, ...prefs.token_thresholds };
     } catch { /* fall back to defaults */ }
   }

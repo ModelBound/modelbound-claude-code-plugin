@@ -2,7 +2,7 @@
   "SessionStart": [
     {
       "matcher": "*",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/session-start.js",
+      "command": "node ${CLAUDE_PLUGIN_ROOT}/dist/session-start.js",
       "description": "ModelBound: set workspace context, optionally auto-sync"
     }
   ],
@@ -10,24 +10,24 @@
     {
       "matcher": "Edit|Write|MultiEdit",
       "pathPattern": ".modelbound/**|.claude/**|.cursor/rules/**|.kiro/skills/**|.agents/skills/**",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/post-edit-sync.js",
+      "command": "node ${CLAUDE_PLUGIN_ROOT}/dist/post-edit-sync.js",
       "description": "ModelBound: auto-push skill file edits to cloud"
     }
   ],
   "PreToolUse": [
     {
       "matcher": "Edit|Write|MultiEdit",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/backup.js ${ARGUMENTS}",
+      "command": "node ${CLAUDE_PLUGIN_ROOT}/dist/backup.js ${ARGUMENTS}",
       "description": "ModelBound: pre-edit backup to .mb-backup/"
     },
     {
       "matcher": "Bash",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/guard-bash.js",
+      "command": "node ${CLAUDE_PLUGIN_ROOT}/dist/guard-bash.js",
       "description": "ModelBound: block denylisted bash patterns (rm -rf, curl | sh, etc.)"
     },
     {
       "matcher": "WebFetch",
-      "command": "node ${CLAUDE_PLUGIN_ROOT}/scripts/guard-webfetch.js",
+      "command": "node ${CLAUDE_PLUGIN_ROOT}/dist/guard-webfetch.js",
       "description": "ModelBound: block private IPs and non-allow-listed domains"
     }
   ]

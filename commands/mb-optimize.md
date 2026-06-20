@@ -4,7 +4,7 @@ argument-hint: <slug|path> [--apply] [--strategy balanced|aggressive|structure-o
 allowed-tools: Bash(npx:*)
 ---
 
-Run: `npx -y @modelbound/cli optimize $ARGUMENTS`
+Run: `npx -y modelbound optimize $ARGUMENTS`
 
 If the user did not pass `--apply`, summarize the diff and ask whether to apply.
 If they passed `--apply`, report the new version ID and token savings.

@@ -7,7 +7,7 @@ import {
 } from "./chunk-3W7TYMR3.js";
 import {
   callMcpTool
-} from "./chunk-Z7IDK4O3.js";
+} from "./chunk-WNETRTE4.js";
 
 // scripts/skill.ts
 import { promises as fs } from "node:fs";

@@ -25,6 +25,8 @@ function resolveApiKey(cfg: Partial<ModelBoundConfig>): string | undefined {
   return cfg.apiKey ?? cfg.token ?? process.env.MODELBOUND_API_KEY;
 }
 
+export { resolveApiKey };
+
 const DEFAULTS: ModelBoundConfig = {
   mcpUrl: "https://mcp.modelbound.co/mcp",
   authUrl: "https://modelbound.co/api/extension-device-auth",

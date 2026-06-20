@@ -4,4 +4,4 @@ tags: [mb]
 argument-hint: [<skill-file>]
 ---
 
-!`node ${CLAUDE_PLUGIN_ROOT}/scripts/trust.js ${ARGUMENTS}`
+!`node ${CLAUDE_PLUGIN_ROOT}/dist/trust.js ${ARGUMENTS}`

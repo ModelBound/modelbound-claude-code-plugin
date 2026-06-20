@@ -1,13 +1,15 @@
-import { loadConfig } from "./config.js";
+import { ensureValidApiKey, loadConfig } from "./config.js";
 
 async function main() {
-  const cfg = await loadConfig();
-  if (!cfg.apiKey) {
+  const { apiKey, check, cfg } = await ensureValidApiKey();
+  if (!apiKey) {
     console.log("Not signed in. Run /mb:sign-in.");
     return;
   }
-  console.log(`Signed in: ${cfg.email ?? "(unknown email)"}`);
-  console.log(`Active team: ${cfg.activeTeamId ?? "(none)"}`);
+  const email = check?.status === "valid" ? (check.email ?? cfg.email) : cfg.email;
+  const team = check?.status === "valid" ? (check.teamId ?? cfg.activeTeamId) : cfg.activeTeamId;
+  console.log(`Signed in: ${email ?? "(unknown email)"}`);
+  console.log(`Active team: ${team ?? "(none)"}`);
   console.log(`MCP: ${cfg.mcpUrl}`);
   console.log(`Last sync: ${cfg.lastSyncAt ?? "never"}`);
   console.log(`Hooks: autoSync=${cfg.hooks.autoSync} bashGuard=${cfg.hooks.bashGuard} webFetchGuard=${cfg.hooks.webFetchGuard}`);

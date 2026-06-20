@@ -4,5 +4,5 @@ Show the currently signed-in ModelBound account and validate the stored API key 
 
 Run:
 ```
-node scripts/whoami.js
+node ${CLAUDE_PLUGIN_ROOT}/dist/whoami.js
 ```

@@ -6,4 +6,4 @@ argument-hint: <skill-id> [from-version] [to-version]
 
 Show a diff between two versions of a skill. Defaults to latest vs current.
 
-!`node ${CLAUDE_PLUGIN_ROOT}/scripts/diff.js ${ARGUMENTS}`
+!`node ${CLAUDE_PLUGIN_ROOT}/dist/diff.js ${ARGUMENTS}`

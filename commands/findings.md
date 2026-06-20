@@ -4,4 +4,4 @@ tags: [mb]
 argument-hint: list --skill <file|slug>
 ---
 
-!`node ${CLAUDE_PLUGIN_ROOT}/scripts/findings.js list --skill ${ARGUMENTS}`
+!`node ${CLAUDE_PLUGIN_ROOT}/dist/findings.js list --skill ${ARGUMENTS}`

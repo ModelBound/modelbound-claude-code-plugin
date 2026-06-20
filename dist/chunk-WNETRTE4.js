@@ -226,6 +226,7 @@ async function callMcpTool(cfg, apiKey, name, args, aliases = []) {
 }
 
 export {
+  resolveApiKey,
   loadConfig,
   saveConfig,
   requireApiKey,

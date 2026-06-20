@@ -1,14 +1,16 @@
-// Check project health scores and token budgets.
+// Check project health: local context size + MCP connectivity.
 import { promises as fs } from "node:fs";
 import { join } from "node:path";
-import { loadConfig, callMcpTool, requireApiKey } from "./config.js";
+import { callMcpTool, requireApiKey } from "./config.js";
+import { setWorkspaceContext } from "./skill.js";
 import { encode } from "gpt-tokenizer";
 
 async function main() {
   const { cfg, apiKey } = await requireApiKey();
+  const cwd = process.cwd();
 
   // Local file analysis
-  const claudeDir = join(process.cwd(), ".claude");
+  const claudeDir = join(cwd, ".claude");
   let localTokens = 0;
   let fileCount = 0;
   try {
@@ -25,33 +27,22 @@ async function main() {
     }
   } catch { /* .claude/ may not exist */ }
 
-  // Server-side health
-  const health = await callMcpTool<{
-    overallScore: number;
-    budgets: Array<{ name: string; used: number; limit: number; status: string }>;
-    suggestions: string[];
-  }>(cfg, apiKey, "pipeline.status", { source: "claude-code-plugin" });
+  let mcpOk = false;
+  let who: { user_email?: string; team_id?: string } | null = null;
+  try {
+    await setWorkspaceContext(cfg, apiKey, cwd);
+    who = await callMcpTool<{ user_email?: string; team_id?: string }>(cfg, apiKey, "auth_whoami", {});
+    mcpOk = true;
+  } catch {
+    mcpOk = false;
+  }
 
   console.log("Project Health");
   console.log("==============");
   console.log(`Local .claude/ context: ${fileCount} files · ${localTokens.toLocaleString()} tokens`);
-
-  if (health) {
-    console.log(`\nOverall score: ${health.overallScore ?? "—"}/100`);
-    if (health.budgets?.length) {
-      console.log("\nBudgets:");
-      for (const b of health.budgets) {
-        const pct = Math.round((b.used / Math.max(b.limit, 1)) * 100);
-        const icon = b.status === "ok" ? "✓" : b.status === "warning" ? "⚠" : "✗";
-        console.log(`  ${icon} ${b.name}: ${b.used.toLocaleString()}/${b.limit.toLocaleString()} (${pct}%)`);
-      }
-    }
-    if (health.suggestions?.length) {
-      console.log("\nSuggestions:");
-      for (const s of health.suggestions) console.log(`  • ${s}`);
-    }
-  } else {
-    console.log("\n(Remote health data unavailable — check sign-in or server status.)");
+  console.log(`MCP: ${mcpOk ? "reachable" : "unavailable"}${who?.user_email ? ` · ${who.user_email}` : ""}`);
+  if (!mcpOk) {
+    console.log("\n(Remote health unavailable — check sign-in or server status.)");
   }
 }
 

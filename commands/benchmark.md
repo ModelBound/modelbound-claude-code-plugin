@@ -4,4 +4,4 @@ tags: [mb]
 argument-hint: --skill <file|slug>
 ---
 
-!`node ${CLAUDE_PLUGIN_ROOT}/scripts/benchmark.js --skill ${ARGUMENTS}`
+!`node ${CLAUDE_PLUGIN_ROOT}/dist/benchmark.js --skill ${ARGUMENTS}`

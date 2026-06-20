@@ -3,10 +3,23 @@
   "version": "0.2.0",
   "description": "ModelBound for Claude Code — token optimization, Skill Development Pipeline, test, benchmark, versions, restore, diff. Pre-edit backup hook protects skill files from accidental wipes.",
   "author": { "name": "ModelBound", "url": "https://modelbound.co" },
-  "homepage": "https://modelbound.co/open-source",
+  "homepage": "https://modelbound.co/connect",
   "repository": "https://github.com/ModelBound/modelbound-claude-code-plugin",
   "license": "MIT",
-  "keywords": ["modelbound", "agent-skills", "token-optimization", "skill-pipeline"],
+  "keywords": [
+    "modelbound",
+    "claude-code",
+    "claude",
+    "anthropic",
+    "agent-skills",
+    "context-engineering",
+    "prompt-engineering",
+    "mcp",
+    "model-context-protocol",
+    "skill-pipeline",
+    "token-optimization",
+    "ai-agents"
+  ],
   "commands": "./commands",
   "hooks": "./hooks/hooks.json"
 }

@@ -1,0 +1,24 @@
+{
+  "description": "Official ModelBound plugin for Claude Code — sync skills and rules, run the Skill Development Pipeline, optimize tokens, and guard MCP/bash tool use.",
+  "homepage": "https://modelbound.co/connect",
+  "topics": [
+    "ai",
+    "ai-agents",
+    "ai-tools",
+    "agent-skills",
+    "context-engineering",
+    "prompt-engineering",
+    "prompts",
+    "llm",
+    "generative-ai",
+    "artificial-intelligence",
+    "claude-code",
+    "claude",
+    "anthropic",
+    "mcp",
+    "model-context-protocol",
+    "plugin",
+    "agentic-workflow",
+    "token-optimization"
+  ]
+}

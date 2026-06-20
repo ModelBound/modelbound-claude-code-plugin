@@ -2,8 +2,27 @@
   "name": "@modelbound/claude-code-plugin",
   "version": "0.1.0",
   "private": true,
-  "description": "Local scripts powering the ModelBound Claude Code plugin",
+  "description": "Official ModelBound plugin for Claude Code — sync skills and rules, run the Skill Development Pipeline, optimize tokens, and guard MCP/bash tool use.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ModelBound/modelbound-claude-code-plugin.git"
+  },
+  "homepage": "https://modelbound.co/connect",
+  "keywords": [
+    "modelbound",
+    "claude-code",
+    "claude",
+    "anthropic",
+    "agent-skills",
+    "context-engineering",
+    "prompt-engineering",
+    "mcp",
+    "model-context-protocol",
+    "skill-pipeline",
+    "token-optimization",
+    "ai-agents"
+  ],
   "type": "module",
   "scripts": {
     "build": "tsup scripts/*.ts --format esm --target node20 --out-dir dist --clean",

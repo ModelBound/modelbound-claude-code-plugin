@@ -4,6 +4,6 @@ argument-hint: <skill-file>
 allowed-tools: Bash(npx:*)
 ---
 
-Run: `npx -y modelbound test --skill $ARGUMENTS`
+Run: `npx -y modelbound test run --skill $ARGUMENTS`
 
-Report results. If assertions failed, show which ones and propose fixes.
+Report results. If no test cases exist, suggest `modelbound test create` or `modelbound test seed`.

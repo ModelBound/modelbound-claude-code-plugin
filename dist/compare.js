@@ -14,8 +14,8 @@ async function main() {
   const fromIdx = process.argv.indexOf("--from");
   const toIdx = process.argv.indexOf("--to");
   const target = targetIdx >= 0 ? process.argv[targetIdx + 1] : process.argv[2];
-  const fromVersion = fromIdx >= 0 ? process.argv[fromIdx + 1] : process.argv[3] ?? "latest";
-  const toVersion = toIdx >= 0 ? process.argv[toIdx + 1] : process.argv[4] ?? "current";
+  const fromVersion = fromIdx >= 0 ? process.argv[fromIdx + 1] : targetIdx >= 0 ? "latest" : process.argv[3] ?? "latest";
+  const toVersion = toIdx >= 0 ? process.argv[toIdx + 1] : targetIdx >= 0 ? "current" : process.argv[4] ?? "current";
   if (!target) {
     console.error("Usage: /mb:compare --skill <file|slug> [--from latest] [--to current]");
     process.exit(1);

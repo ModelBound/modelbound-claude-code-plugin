@@ -1,5 +1,7 @@
 # ModelBound — Claude Code plugin
 
+[![ModelBound Skill Trust](https://modelbound.co/api/badge/skills.svg?repo=ModelBound/modelbound-claude-code-plugin)](https://modelbound.co/connect/github-actions)
+
 The official [ModelBound](https://modelbound.co) plugin for Claude Code — keep your team's skills, rules, and system prompts in sync; audit token cost; harden MCP/bash tool use; and run the Skill Development Pipeline without leaving the terminal.
 
 ## Why ModelBound?

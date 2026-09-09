@@ -26,7 +26,8 @@
   "type": "module",
   "scripts": {
     "build": "tsup scripts/*.ts --format esm --target node20 --out-dir dist --clean",
-    "dev": "tsup scripts/*.ts --format esm --target node20 --out-dir dist --watch"
+    "dev": "tsup scripts/*.ts --format esm --target node20 --out-dir dist --watch",
+    "test": "node scripts/validate-plugin.mjs"
   },
   "dependencies": {
     "gpt-tokenizer": "^2.5.1"

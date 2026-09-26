@@ -46,3 +46,20 @@ MIT
 Reports feed the ModelBound feedback loop: repeat failures are grouped,
 diagnosed, and turned into a proposed minimal edit plus a regression test you
 accept or reject.
+
+## The agent harness
+
+| Command | What it does |
+|---------|--------------|
+| `/mb-harness` | Is this skill cleared to run unattended? Pass/fail across context, permissions, guardrails, verification. |
+
+Presets for cautious, balanced and autonomous postures live in
+`presets/harness.json`.
+
+## Tracing
+
+| Command | What it does |
+|---------|--------------|
+| `/mb-trace <slug>` | Report the run you just finished, tied to the skill. Step summaries only. |
+
+See `docs/TRACING.md`.

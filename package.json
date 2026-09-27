@@ -1,6 +1,6 @@
 {
   "name": "@modelbound/claude-code-plugin",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Official ModelBound plugin for Claude Code — sync skills and rules, run the Skill Development Pipeline, optimize tokens, and guard MCP/bash tool use.",
   "license": "MIT",
@@ -25,10 +25,12 @@
   ],
   "type": "module",
   "scripts": {
-    "build": "tsup scripts/*.ts --format esm --target node20 --out-dir dist --clean",
+    "build": "rm -rf dist && tsup scripts/*.ts --format esm --target node20 --out-dir dist",
     "dev": "tsup scripts/*.ts --format esm --target node20 --out-dir dist --watch",
     "test": "npm run build && node scripts/validate-plugin.mjs --smoke",
-    "test:validate": "node scripts/validate-plugin.mjs"
+    "test:validate": "node scripts/validate-plugin.mjs",
+    "test:e2e": "node scripts/integration/run-plugin-e2e.mjs",
+    "test:e2e:full": "npm run test && node scripts/integration/run-plugin-e2e.mjs --skip-validate"
   },
   "dependencies": {
     "gpt-tokenizer": "^2.5.1"

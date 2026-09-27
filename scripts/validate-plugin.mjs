@@ -43,7 +43,14 @@ if (!fs.existsSync(commandsDir)) {
   } else {
     ok(`${mbCommands.length} mb-* slash command files`);
   }
-  for (const name of ["mb-report.md", "mb-reliability.md", "mb-login.md", "mb-health.md"]) {
+  for (const name of [
+    "mb-report.md",
+    "mb-reliability.md",
+    "mb-trace.md",
+    "mb-harness.md",
+    "mb-login.md",
+    "mb-health.md",
+  ]) {
     if (!fs.existsSync(path.join(commandsDir, name))) bad(`missing commands/${name}`);
     else ok(`commands/${name}`);
   }

@@ -7,10 +7,10 @@ Run ModelBound's token optimization and Skill Development Pipeline from inside C
 ```bash
 # In Claude Code
 /plugin install ModelBound/modelbound-claude-code-plugin
-mb-login    # one-time device-code auth
+/mb-login   # one-time device-code auth
 ```
 
-Requires Node ≥ 20 and either `MODELBOUND_API_KEY` or a one-time `/mb login`.
+Requires Node ≥ 20 and either `MODELBOUND_API_KEY` or a one-time `/mb-login`.
 
 ## Tests (no Claude Code install)
 

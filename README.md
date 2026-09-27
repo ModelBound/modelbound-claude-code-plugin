@@ -64,6 +64,10 @@ accept or reject.
 Presets for cautious, balanced and autonomous postures live in
 `presets/harness.json`.
 
+## Use in CI
+
+The plugin wraps the ModelBound CLI, so the same checks run in CI with `npx -y modelbound …`. See the [CLI CI guide](https://github.com/ModelBound/modelbound-cli#use-in-ci).
+
 ## Tracing
 
 | Command | What it does |

@@ -1,6 +1,6 @@
 {
   "name": "modelbound",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "ModelBound for Claude Code — token optimization, Skill Development Pipeline, test, benchmark, versions, restore, diff. Pre-edit backup hook protects skill files from accidental wipes.",
   "author": { "name": "ModelBound", "url": "https://modelbound.co" },
   "homepage": "https://modelbound.co/connect",

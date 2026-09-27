@@ -12,6 +12,14 @@ mb-login    # one-time device-code auth
 
 Requires Node ≥ 20 and either `MODELBOUND_API_KEY` or a one-time `/mb login`.
 
+## Tests (no Claude Code install)
+
+```bash
+npm run test:e2e:full
+```
+
+Uses `scripts/integration/run-plugin-e2e.mjs` (hooks, slash-command docs, optional cloud checks when `MODELBOUND_API_KEY` is set).
+
 ## Slash commands
 
 | Command | What it does |

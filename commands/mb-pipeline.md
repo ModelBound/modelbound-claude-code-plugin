@@ -8,4 +8,4 @@ Parse `$ARGUMENTS` as skill file path plus optional flags. Run:
 
 `npx -y modelbound pipeline run --skill <file> [flags]`
 
-Use `--stage test_optimize` for Trust & Safety + test stage only. Summarize stage results; if any failed, list findings and propose fixes.
+Use `--stage test_optimize` for the readiness checks + test stage only. Summarize stage results; if any failed, list findings and propose fixes.

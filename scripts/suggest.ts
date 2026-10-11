@@ -1,4 +1,4 @@
-// Suggest skill improvements from trust & quality analysis.
+// Suggest skill improvements from findings, tests and real-world outcomes.
 import { callMcpTool, requireApiKey } from "./config.js";
 import { resolveSkillId } from "./skill.js";
 

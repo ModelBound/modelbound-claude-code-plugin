@@ -10,14 +10,8 @@ import {
 
 // scripts/findings.ts
 function renderFindings(r) {
-  const scores = r.scores;
-  if (scores) {
-    console.log(
-      `Trust score: ${scores.total ?? "\u2014"}/100 \xB7 clarity ${scores.clarity ?? "\u2014"} \xB7 safety ${scores.safety ?? "\u2014"} \xB7 fit ${scores.fit ?? "\u2014"}`
-    );
-    if (scores.ai_fit_reason)
-      console.log(`AI fit: ${scores.ai_fit_reason}`);
-  }
+  if (r.fit_reason)
+    console.log(`Description match: ${r.fit_reason}`);
   const findings = r.findings ?? [];
   if (!findings.length) {
     console.log("\u2713 No findings");

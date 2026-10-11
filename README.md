@@ -25,7 +25,7 @@ Uses `scripts/integration/run-plugin-e2e.mjs` (hooks, slash-command docs, option
 | Command | What it does |
 |---|---|
 | `/mb-optimize <file\|skill>` | Run token optimization. Add `--apply` to save a new version. |
-| `/mb-pipeline <skill>` | Full Skill Development Pipeline (lint → trust → test → benchmark → optimize). |
+| `/mb-pipeline <skill>` | Full Skill Development Pipeline (lint → checks → test → benchmark → optimize). |
 | `/mb-test <skill>` | Run the test suite (optional `--model`). |
 | `/mb-benchmark <skill> <verA> <verB>` | Head-to-head benchmark. |
 | `/mb-versions <skill>` | List versions, newest first. |

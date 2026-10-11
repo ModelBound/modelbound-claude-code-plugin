@@ -1,4 +1,4 @@
-// Trust & Safety findings — list, ignore, unignore (cloud MCP).
+// Safety & quality findings — list, ignore, unignore (cloud MCP).
 import { callMcpTool, requireApiKey } from "./config.js";
 import { resolveSkillId } from "./skill.js";
 
@@ -13,14 +13,7 @@ interface Finding {
 
 interface FindingsResponse {
   skill_id: string;
-  scores?: {
-    total?: number;
-    clarity?: number;
-    safety?: number;
-    fit?: number;
-    ai_fit_score?: number;
-    ai_fit_reason?: string;
-  };
+  fit_reason?: string | null;
   findings?: Finding[];
   ignored_keys?: string[];
   scanner_version?: string;
@@ -28,13 +21,7 @@ interface FindingsResponse {
 }
 
 function renderFindings(r: FindingsResponse): void {
-  const scores = r.scores;
-  if (scores) {
-    console.log(
-      `Trust score: ${scores.total ?? "—"}/100 · clarity ${scores.clarity ?? "—"} · safety ${scores.safety ?? "—"} · fit ${scores.fit ?? "—"}`,
-    );
-    if (scores.ai_fit_reason) console.log(`AI fit: ${scores.ai_fit_reason}`);
-  }
+  if (r.fit_reason) console.log(`Description match: ${r.fit_reason}`);
   const findings = r.findings ?? [];
   if (!findings.length) {
     console.log("✓ No findings");

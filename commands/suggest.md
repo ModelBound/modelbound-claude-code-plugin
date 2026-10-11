@@ -1,5 +1,5 @@
 ---
-description: Suggest skill improvements from trust & quality analysis
+description: Suggest skill improvements from findings, tests and real-world outcomes
 tags: [mb]
 argument-hint: --skill <file|slug>
 ---

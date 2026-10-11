@@ -1,5 +1,12 @@
 # Changelog
 
+
+## 0.3.0 — 2026-10-11
+
+### Breaking
+- Removed the numeric trust score. `/mb:trust` is now `/mb:checks` and reports pass / warnings / blocking.
+- `/mb:findings` lists findings only (no scores). Harness presets drop `min_trust` / `enforce_trust`.
+
 ## 0.2.0 — 2026-06-13
 
 ### Added

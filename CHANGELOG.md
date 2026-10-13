@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 — 2026-10-13
+
+### Added
+- `/mb:flight-check [path]`: Flight Check offline safety scan via `npx modelbound check`. No account or AI cost.
+- README leads with three "Start here" commands.
+
 
 ## 0.3.0 — 2026-10-11
 

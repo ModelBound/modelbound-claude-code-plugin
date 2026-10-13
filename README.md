@@ -1,6 +1,16 @@
 # ModelBound — Claude Code plugin
 
-Run ModelBound's token optimization and Skill Development Pipeline from inside Claude Code, no browser round-trip required. Wraps the `@modelbound/cli` so every command works exactly the same as in your terminal and CI.
+Flight Check for your agent skills, inside Claude Code. Wraps the `modelbound` CLI so every command works exactly the same as in your terminal and CI.
+
+## Start here
+
+| Command | What it does |
+|---|---|
+| `/mb:flight-check [path]` | Flight Check: offline safety scan (prompt injection, secrets, risky commands, loop traps). No account needed. |
+| `/mb-login` | Connect to ModelBound so runs show up in Live Runs and skills sync. |
+| `/mb-pipeline <skill>` | Full check before publishing: safety, tests, latency. |
+
+Measure how much a skill actually helps with a blind with/without A/B run at https://modelbound.co/flight-check.
 
 ## Install
 

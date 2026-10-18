@@ -1,8 +1,8 @@
 {
   "name": "@modelbound/claude-code-plugin",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
-  "description": "Official ModelBound plugin for Claude Code — sync skills and rules, run the Skill Development Pipeline, optimize tokens, and guard MCP/bash tool use.",
+  "description": "Official ModelBound plugin for Claude Code \u2014 sync skills and rules, run the Skill Development Pipeline, optimize tokens, and guard MCP/bash tool use.",
   "license": "MIT",
   "repository": {
     "type": "git",
